@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Emotion Detection</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 760px; margin: 60px auto; padding: 0 20px; color: #202938; }
+    h1 { color: #17365d; }
+    textarea { box-sizing: border-box; width: 100%; min-height: 120px; padding: 12px; font: inherit; }
+    button { margin-top: 12px; padding: 11px 20px; background: #17365d; color: white; border: 0; border-radius: 5px; cursor: pointer; }
+    #result { margin-top: 22px; padding: 14px; background: #f1f5f9; border-radius: 5px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Emotion Detection Application</h1>
+  <p>Enter an English sentence to identify its emotions.</p>
+  <label for="textToAnalyze">Text to analyze</label>
+  <textarea id="textToAnalyze" placeholder="Type your sentence here..."></textarea>
+  <button type="button" onclick="analyzeText()">Analyze</button>
+  <div id="result" role="status" aria-live="polite"></div>
+  <script>
+    async function analyzeText() {
+      const text = document.getElementById('textToAnalyze').value;
+      const result = document.getElementById('result');
+      if (!text.trim()) {
+        result.textContent = 'Invalid text! Please try again!';
+        return;
+      }
+      result.textContent = 'Analyzing...';
+      try {
+        const response = await fetch('/emotionDetector?textToAnalyze=' + encodeURIComponent(text));
+        const message = await response.text();
+        result.textContent = message;
+      } catch (error) {
+        result.textContent = 'Unable to connect to the application. Please try again.';
+      }
+    }
+  </script>
+</body>
+</html>
